@@ -30,16 +30,22 @@ type IpInfo struct {
 
 func main() {
 	var requestedIp string
-	var ipinfo IpInfo
 	if len(os.Args) > 1 {
 		requestedIp = "/" + os.Args[1]
 	}
 
 	url := fmt.Sprintf("https://ipinfo.io%v?token=%v", requestedIp, strings.TrimSpace(token))
-	resp := must(http.Get(url))
+	resp, err := http.Get(url)
+	if err != nil || resp.StatusCode != http.StatusOK {
+		panic("error hitting ipinfo: " + err.Error())
+	}
+	bytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
 
-	bytes := must(io.ReadAll(resp.Body))
-	err := json.Unmarshal(bytes, &ipinfo)
+	var ipinfo IpInfo
+	err = json.Unmarshal(bytes, &ipinfo)
 	if err != nil {
 		panic(err)
 	}
@@ -55,11 +61,4 @@ func main() {
 	}
 
 	fmt.Println(t.Render())
-}
-
-func must[T any](thing T, err error) T {
-	if err != nil {
-		panic(err)
-	}
-	return thing
 }

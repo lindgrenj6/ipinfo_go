@@ -1,10 +1,5 @@
 module github.com/lindgrenj6/ipinfo_go
 
-go 1.18
+go 1.16
 
-require (
-	github.com/jedib0t/go-pretty/v6 v6.3.6 // indirect
-	github.com/mattn/go-runewidth v0.0.13 // indirect
-	github.com/rivo/uniseg v0.2.0 // indirect
-	golang.org/x/sys v0.0.0-20190412213103-97732733099d // indirect
-)
+require github.com/jedib0t/go-pretty/v6 v6.3.6
